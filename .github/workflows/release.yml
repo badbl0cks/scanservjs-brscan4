@@ -3,6 +3,18 @@ name: release
 on:
   workflow_dispatch:
 
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - 'LICENSE'
+      - '**/*.md'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
+
+    branches:
+      - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,15 +48,13 @@ jobs:
       run: |
         echo "PACKAGE_NAME=$(ls ./debian/ | grep .*\.deb)" >> $GITHUB_ENV
 
-    # Create a draft release with asset if there's a package
+    # Create a release with asset if there's a package
     - name: Create Release
       id: create_release
       if: env.PACKAGE_NAME
       uses: softprops/action-gh-release@v1
       with:
-        draft: true
         files: ./debian/${{ env.PACKAGE_NAME }}
         name: Release ${{ github.ref }}
-        prerelease: true
         token: ${{ secrets.GITHUB_TOKEN }}
         tag_name: ${{ github.ref }}

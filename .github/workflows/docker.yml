@@ -9,8 +9,6 @@ on:
       - 'docs/**'
       - 'LICENSE'
       - '**/*.md'
-      - 'Dockerfile'
-      - 'entrypoint.sh'
     branches:
       - master
 

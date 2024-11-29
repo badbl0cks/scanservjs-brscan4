@@ -102,7 +102,6 @@ RUN apt-get update \
   && apt-get install -yq curl \
   && curl -fSsL "https://download.brother.com/welcome/dlf105200/brscan4-0.4.11-1.amd64.deb" -o /tmp/brscan4.deb \
   && curl -fSsL "https://download.brother.com/welcome/dlf006652/brscan-skey-0.3.2-0.amd64.deb" -o /tmp/brscan-skey.deb \
-  && apt-get remove curl -yq \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
   && dpkg -i --force-all /tmp/brscan4.deb \

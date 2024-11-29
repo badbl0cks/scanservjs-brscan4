@@ -101,9 +101,23 @@ FROM scanservjs-core AS scanservjs-brscan4
 RUN apt-get update \
   && apt-get install -yq curl \
   && curl -fSsL "https://download.brother.com/welcome/dlf105200/brscan4-0.4.11-1.amd64.deb" -o /tmp/brscan4.deb \
+  && curl -fSsL "https://download.brother.com/welcome/dlf006652/brscan-skey-0.3.2-0.amd64.deb" -o /tmp/brscan-skey.deb \
   && apt-get remove curl -yq \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* \
-  && dpkg -i /tmp/brscan4.deb \
+  && dpkg -i --force-all /tmp/brscan4.deb \
+  && dpkg -i --force-all /tmp/brscan-skey.deb \
   && rm /tmp/brscan4.deb \
+  && rm /tmp/brscan-skey.deb \
   && echo brscan4 >> /etc/sane.d/dll.conf
+
+# Update all .config files in the directory
+RUN for file in /opt/brother/scanner/brscan-skey/*.config; do \
+    sed -i 's/^resolution=.*/resolution=300/' "$file" && \
+    sed -i 's/^source=.*/source=ADF_C/' "$file" && \
+    sed -i 's/^duplex=.*/duplex=ON/' "$file" && \
+    sed -i 's/^size=.*/size=Letter/' "$file"; \
+  done
+
+EXPOSE 54925/udp
+EXPOSE 54921/tcp

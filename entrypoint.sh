@@ -41,4 +41,7 @@ fi
 unset IFS
 set +f
 
+#Launch brscan-skey daemon
+/opt/brother/scanner/brscan-skey/brscan-skey
+#Launch server
 node ./server/server.js
